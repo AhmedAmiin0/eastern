@@ -6,7 +6,7 @@ security:
         memory:
             memory:
                 users:
-                    admin: { password: '$2y$10$Ivw8MYlXM.aq6zDgyb/aZOFuSmCUA2Yq/yl8yrhP.doGZRRJajRPS', roles: ['ROLE_ADMIN'] }
+                    admin: { password: '$2y$12$3ALyASuGwM4.hbej4dUEwuD6wtuEHGW0K5g8GeSjwsPxprzhui08m', roles: ['ROLE_ADMIN'] }
     
     firewalls:
         dev:

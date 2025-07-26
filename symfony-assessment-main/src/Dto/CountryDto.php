@@ -63,7 +63,6 @@ class CountryDto
             $dto->setCurrency(CurrencyDto::fromArray($data['currency']));
         }
 
-        $dto->setUuid($data['uuid'] ?? null);
         return $dto;
     }
 

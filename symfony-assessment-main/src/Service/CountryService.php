@@ -20,7 +20,7 @@ class CountryService
         private ValidationService $validationService
     ) {}
 
-    public function getCountries(int $limit = 250, int $offset = 0): array
+    public function getCountries(int $limit = 300, int $offset = 0): array
     {
         $countries = $this->countryRepository->getCountriesWithCurrency($limit, $offset);
         return $this->normalizer->normalize($countries, 'json', ['groups' => ['country']]);
