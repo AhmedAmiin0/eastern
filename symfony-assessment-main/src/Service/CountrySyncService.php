@@ -95,7 +95,6 @@ class CountrySyncService
         $country->setIndependant($countryData['independent'] ?? null);
         $country->setFlag($countryData['flags']['png'] ?? null);
 
-        // Handle currency
         if (!empty($countryData['currencies'])) {
             $currencyCode = array_key_first($countryData['currencies']);
             $currencyData = $countryData['currencies'][$currencyCode];
@@ -106,8 +105,6 @@ class CountrySyncService
             
             $currency = $this->countryRepository->findOrCreateCurrency($currencyDto);
             $country->setCurrency($currency);
-        } else {
-            $country->setCurrency(null);
-        }
+        } 
     }
 } 
