@@ -1,0 +1,21 @@
+nelmio_api_doc:
+    documentation:
+        info:
+            title: Countries API
+            description: API for managing countries with currency information. This API provides CRUD operations for countries and their associated currencies. GET endpoints are publicly accessible, while POST, PATCH, and DELETE endpoints require basic authentication. Data is synchronized with REST Countries API and can be reset using the sync command.
+            version: 1.0.0
+            contact:
+                name: API Support
+                email: support@example.com
+        servers:
+            - url: http://localhost:8084
+              description: Development server
+        components:
+            securitySchemes:
+                basicAuth:
+                    type: http
+                    scheme: basic
+                    description: Basic authentication required for POST, PATCH, and DELETE operations
+    areas:
+        path_patterns:
+            - ^/api(?!/doc$)

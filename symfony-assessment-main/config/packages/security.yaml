@@ -1,0 +1,25 @@
+security:
+    password_hashers:
+        Symfony\Component\Security\Core\User\InMemoryUser: 'auto'
+    
+    providers:
+        memory:
+            memory:
+                users:
+                    admin: { password: '$2y$10$Ivw8MYlXM.aq6zDgyb/aZOFuSmCUA2Yq/yl8yrhP.doGZRRJajRPS', roles: ['ROLE_ADMIN'] }
+    
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        
+        api:
+            pattern: ^/api/v1/countries
+            stateless: true
+            http_basic:
+                realm: Secured Area
+    
+    access_control:
+        - { path: ^/api/v1/countries/list, roles: PUBLIC_ACCESS, methods: [GET] }
+        - { path: ^/api/v1/countries/[0-9]+$, roles: PUBLIC_ACCESS, methods: [GET] }
+        - { path: ^/api/v1/countries, roles: ROLE_ADMIN, methods: [POST, PATCH, DELETE] }
