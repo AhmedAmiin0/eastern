@@ -25,16 +25,9 @@ class CountrySyncService
         private LoggerInterface $logger
     ) {}
 
-    public function fetchCountries(): array
-    {
-        $response = $this->httpClient->request('GET', $this->baseUrl);
-        $data = $response->toArray();
-        return $data;
-    }
-
     public function syncCountries(): int
     {
-        $apiCountries = $this->fetchCountries();
+        $apiCountries = $this->httpClient->request('GET', $this->baseUrl)->toArray();
         $existingCountries = $this->countryRepository->findAll();
         
         $this->logger->info('Starting sync with ' . count($apiCountries) . ' countries from API');
@@ -57,17 +50,14 @@ class CountrySyncService
             $name = $countryData['name']['common'];
             
             if (isset($existingMap[$name])) {
-                $this->resetCountryToOriginalData($existingMap[$name], $countryData);
-                $this->entityManager->persist($existingMap[$name]);
+                $this->updateCountry($existingMap[$name], $countryData);
                 $stats['updated']++;
-                $this->logger->info("Updated: {$name}");
             } else {
-                $newCountry = $this->createCountry($countryData);
-                $this->entityManager->persist($newCountry);
+                $this->entityManager->persist($this->createCountry($countryData));
                 $stats['created']++;
-                $this->logger->info("Created: {$name}");
             }
             $stats['total']++;
+            $this->logger->info(($stats['updated'] > 0 ? "Updated" : "Created") . ": {$name}");
         }
 
         foreach ($existingCountries as $existingCountry) {
@@ -90,9 +80,10 @@ class CountrySyncService
         return $country;
     }
 
-    private function resetCountryToOriginalData(Country $country, array $countryData): void
+    private function updateCountry(Country $country, array $countryData): void
     {
         $this->populateCountryData($country, $countryData);
+        $this->entityManager->persist($country);
     }
 
     private function populateCountryData(Country $country, array $countryData): void
@@ -104,7 +95,8 @@ class CountrySyncService
         $country->setIndependant($countryData['independent'] ?? null);
         $country->setFlag($countryData['flags']['png'] ?? null);
 
-        if (isset($countryData['currencies']) && !empty($countryData['currencies'])) {
+        // Handle currency
+        if (!empty($countryData['currencies'])) {
             $currencyCode = array_key_first($countryData['currencies']);
             $currencyData = $countryData['currencies'][$currencyCode];
             
