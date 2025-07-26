@@ -25,12 +25,10 @@ export const useCountries = () => {
     fetchCountries();
   }, []);
 
-
-
   const fetchCountries = async () => {
-    console.log('Fetching countries...');
     const data = await countriesApi.request();
     setCountries(data?.data || []);
+    console.log('Countries:', countries);
   };
 
   const openCreateModal = () => {
@@ -68,7 +66,6 @@ export const useCountries = () => {
     if (!isAuthenticated) { 
       return;
     }
-    if (!confirm('Are you sure you want to delete this country?')) return;
     
     try {
       await deleteCountryApi.request({ data: id });

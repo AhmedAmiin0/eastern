@@ -22,12 +22,10 @@ type LoginForm = z.infer<typeof loginSchema>;
 interface LoginModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onLoginSuccess: () => void;
 }
 
-export default function LoginModal({ isOpen, onClose, onLoginSuccess }: LoginModalProps) {
+export default function LoginModal({ isOpen, onClose}: LoginModalProps) {
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState('');
   const { login } = useAuthStore();
 
   const loginForm = useForm<LoginForm>({
@@ -37,18 +35,18 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }: LoginMod
   const testAuthApi = useApi(testAuth);
 
   const onLogin = async (data: LoginForm) => {
+
     try {
-      await testAuthApi.request({ data });
+      const response = await testAuthApi.request({ data });
+      console.log('Response:', response);
     } catch (error: any) {
+      console.log('Error:', error);
       if (error?.response?.status === 400) {
         login(data.username, data.password);
-        onLoginSuccess();
-        console.log('Login successful');
         onClose();
         loginForm.reset();
         return;
       }
-      setError('Something went wrong. Please try again.');
     }
   };
 
@@ -72,14 +70,14 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }: LoginMod
         </div>
 
         {/* Error Message */}
-        {error && (
+        {testAuthApi.error && (
           <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md mb-6">
-            {error}
+            {testAuthApi.error}
           </div>
         )}
 
         {/* Login Form */}
-        <form onSubmit={loginForm.handleSubmit(onLogin)} className="space-y-6">
+        <form  className="space-y-6">
           <Input
             label="Username"
             placeholder="Enter username"
@@ -119,6 +117,7 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }: LoginMod
             loading={testAuthApi.loading}
             disabled={testAuthApi.loading}
             className="w-full"
+            onClick={loginForm.handleSubmit(onLogin)}
           >
             {testAuthApi.loading ? 'Signing in...' : 'Sign In'}
           </Button>

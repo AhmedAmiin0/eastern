@@ -1,16 +1,16 @@
+'use client';
+
 import { 
   Plus, 
   Globe
 } from 'lucide-react';
-import Button from './Button';
-import CountryModal from './CountryModal';
-import CountryCard from './CountryCard';
-import { Country } from '../services/api';
-import { useAuthStore } from '../store/authStore';
-import { useCountries } from '../hooks/useCountries';
+import Button from '../../components/Button';
+import CountryModal from '../../components/CountryModal';
+import CountryCard from '../../components/CountryCard';
+import { useAuthStore } from '../../store/authStore';
+import { useCountries } from '../../hooks/useCountries';
 
-
-export default function CountryList() {
+export default function CountriesPage() {
   const { isAuthenticated } = useAuthStore();
   const {
     countries,
@@ -44,7 +44,8 @@ export default function CountryList() {
 
   return (
     <>
-      <div className="flex justify-end mb-6">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold text-gray-900">Countries</h1>
         {isAuthenticated && ( 
           <Button
             onClick={openCreateModal}
