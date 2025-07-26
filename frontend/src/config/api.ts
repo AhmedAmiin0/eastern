@@ -1,5 +1,5 @@
-// API base URL
-export const API_BASE_URL = 'http://localhost:8084/api/v1';
+// API base URL from environment variable
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
 
 // API endpoint configuration interface
 export interface EndpointConfig {

@@ -29,7 +29,7 @@ export default function Home() {
           <p className="text-sm text-gray-500">
             Sign in to add, edit, or delete countries
           </p>
-        </div>
+        </div>  
       </div>
     </div>
   );
